@@ -67,6 +67,8 @@ class MainMenuState extends MusicBeatState
 
 	var menuJSON:MenuData;
 
+        var linkArray:Array<Array<String>> = [];
+
 	override function create()
 	{
 		WeekData.loadTheFirstEnabledMod();
@@ -74,7 +76,7 @@ class MainMenuState extends MusicBeatState
 
 		#if desktop
 		// Updating Discord Rich Presence
-		DiscordClient.changePresence("In the Menus", null);
+		DiscordClient.changePresence("Main Menu", null);
 		#end
 		debugKeys = ClientPrefs.copyKey(ClientPrefs.keyBinds.get('debug_1'));
                 modShortcutKeys = ClientPrefs.copyKey(ClientPrefs.keyBinds.get('debug_2'));
@@ -104,6 +106,10 @@ class MainMenuState extends MusicBeatState
 				#if !switch 'donate', #end
 				'options'
 			];
+		}
+
+                for(i in menuJSON.links){
+			linkArray.push(i);
 		}
 
 		var yScroll:Float = Math.max(0.25 - (0.05 * (optionShit.length - 4)), 0.1);
@@ -276,8 +282,10 @@ class MainMenuState extends MusicBeatState
 
 			if (controls.ACCEPT)
 			{
-				if (optionShit[curSelected] == 'donate')
-				{
+                                if (optionShit[curSelected] == linkArray[curSelected][0]) {
+					CoolUtil.browserLoad(linkArray[curSelected][1]);
+                                }
+				else if (optionShit[curSelected] == 'donate')
 					CoolUtil.browserLoad('sites.google.com/view/joalor64official-net6-deez/home');
 				}
 				else
